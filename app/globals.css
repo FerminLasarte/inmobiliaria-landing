@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme {
+  /* Paleta de marca — Azul Marino */
+  --color-navy-50: #f5f7fa;
+  --color-navy-100: #e9edf5;
+  --color-navy-200: #cbd5e6;
+  --color-navy-300: #9fb0cd;
+  --color-navy-400: #6c83ad;
+  --color-navy-500: #4a6392;
+  --color-navy-600: #384c74;
+  --color-navy-700: #2c3c5d;
+  --color-navy-800: #1c2942;
+  --color-navy-900: #101b2d;
+  --color-navy-950: #080e18;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-instrument-serif), ui-serif, Georgia, serif;
+
+  --animate-fade-up: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white text-navy-900 antialiased;
+  }
+
+  ::selection {
+    @apply bg-navy-900 text-white;
+  }
+}

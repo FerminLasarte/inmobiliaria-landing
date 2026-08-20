@@ -1,0 +1,126 @@
+# ---------------------------------------------------------------------------
+# Dependencias
+# ---------------------------------------------------------------------------
+node_modules/
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+jspm_packages/
+web_modules/
+
+# ---------------------------------------------------------------------------
+# Build / artefactos de Next.js
+# ---------------------------------------------------------------------------
+/.next/
+/out/
+/build/
+/dist/
+.turbo/
+.swc/
+next-env.d.ts
+
+# ---------------------------------------------------------------------------
+# Secretos y credenciales  ← NUNCA commitear
+# ---------------------------------------------------------------------------
+# Variables de entorno (todas las variantes: .env, .env.local, .env.production…)
+.env
+.env.*
+!.env.example
+
+# Claves privadas, certificados y keystores
+*.pem
+*.key
+*.p12
+*.pfx
+*.p8
+*.cer
+*.crt
+*.der
+*.jks
+*.keystore
+id_rsa*
+id_ed25519*
+
+# Credenciales de servicios y tokens
+secrets/
+*secret*.json
+*credentials*.json
+service-account*.json
+gha-creds-*.json
+.npmrc
+.yarnrc
+.netrc
+auth.json
+
+# ---------------------------------------------------------------------------
+# Plataformas y tooling de IA
+# ---------------------------------------------------------------------------
+.vercel/
+.claude/
+.cursor/
+.aider*
+.windsurf/
+.github/copilot-instructions.local.md
+
+# ---------------------------------------------------------------------------
+# Testing y cobertura
+# ---------------------------------------------------------------------------
+/coverage/
+.nyc_output/
+/playwright-report/
+/test-results/
+/blob-report/
+.playwright/
+
+# ---------------------------------------------------------------------------
+# Logs y debug
+# ---------------------------------------------------------------------------
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+lerna-debug.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# ---------------------------------------------------------------------------
+# Caches y temporales
+# ---------------------------------------------------------------------------
+.cache/
+.temp/
+.tmp/
+*.tsbuildinfo
+.eslintcache
+.stylelintcache
+*.pid
+*.seed
+*.pid.lock
+
+# ---------------------------------------------------------------------------
+# Sistema operativo
+# ---------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ---------------------------------------------------------------------------
+# Editores
+# ---------------------------------------------------------------------------
+.idea/
+*.iml
+*.swp
+*.swo
+*~
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.example.json
