@@ -14,21 +14,55 @@
   --color-navy-900: #101b2d;
   --color-navy-950: #080e18;
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  /*
+   * Stack tipográfico estilo Apple: en macOS / iOS resuelve a San Francisco
+   * (SF Pro), la misma familia que usa apple.com. En el resto de las
+   * plataformas cae en Inter, que comparte proporciones y altura de x.
+   */
+  --animate-rise: rise 1s cubic-bezier(0.16, 1, 0.3, 1) both;
 
-  --animate-fade-up: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
-
-  @keyframes fade-up {
+  @keyframes rise {
     from {
       opacity: 0;
-      transform: translateY(16px);
+      transform: translateY(22px);
     }
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: none;
     }
   }
+
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Helvetica Neue", var(--font-inter), "Segoe UI", Roboto, sans-serif;
+}
+
+/* Contenedor ancho: aprovecha la pantalla en lugar de encajonar el contenido. */
+@utility shell {
+  @apply mx-auto w-full max-w-[1680px] px-6 sm:px-10 lg:px-16 2xl:px-24;
+}
+
+/*
+ * Rótulo de sección al estilo Apple: chico, semibold, en caja normal y sin
+ * tracking expandido. Nada de versalitas espaciadas.
+ */
+@utility eyebrow {
+  @apply text-[20px] font-semibold leading-none tracking-[-0.016em];
+}
+
+/* Carril horizontal sin barra de scroll visible (carrusel de propiedades). */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Etiqueta de campo o de dato: chica y discreta, no compite con el rótulo. */
+@utility field-label {
+  @apply text-[14px] font-semibold leading-none tracking-[-0.01em];
 }
 
 @layer base {
@@ -38,6 +72,15 @@
 
   body {
     @apply bg-white text-navy-900 antialiased;
+    /* Ajuste óptico propio de SF: títulos apretados, texto normal. */
+    letter-spacing: -0.011em;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-semibold;
+    letter-spacing: -0.032em;
   }
 
   ::selection {

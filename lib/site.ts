@@ -1,12 +1,11 @@
 import {
-  Award,
   Bath,
   BedDouble,
   Car,
+  Clock,
   Handshake,
   MapPin,
   MessageCircle,
-  Phone,
   Ruler,
   ShieldCheck,
   Sparkles,
@@ -31,6 +30,13 @@ export const site = {
   phoneRaw: "5492494217311",
   since: 2017,
 } as const;
+
+/**
+ * Foto de fondo del hero (por ejemplo, una vista de Tandil). Poné el archivo en
+ * `public/images/` y escribí su ruta acá para activarla; con `null` el hero
+ * queda en azul marino sólido.
+ */
+export const heroBackground: string | null = null;
 
 /** Enlace directo a WhatsApp con mensaje pre-cargado. */
 export function whatsappUrl(
@@ -137,14 +143,8 @@ export const contactDetails: ContactDetail[] = [
     href: whatsappUrl(),
   },
   {
-    icon: Phone,
-    label: "Teléfono",
-    value: site.phoneLabel,
-    href: `tel:+${site.phoneRaw}`,
-  },
-  {
-    icon: Award,
-    label: "Matrícula",
-    value: site.license,
+    icon: Clock,
+    label: "Atención",
+    value: "Lunes a viernes · 9 a 13 y 16 a 20 h",
   },
 ];

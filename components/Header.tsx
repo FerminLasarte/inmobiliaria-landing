@@ -1,17 +1,30 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Menu, MessageCircle, X } from "lucide-react";
 
 import { navLinks, site, whatsappUrl } from "@/lib/site";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState<boolean>(false);
+  const [hidden, setHidden] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const lastScrollY = useRef<number>(0);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => {
+      const current = window.scrollY;
+      const goingDown = current > lastScrollY.current;
+
+      setScrolled(current > 24);
+      // Se esconde al bajar y vuelve apenas el usuario sube.
+      setHidden(goingDown && current > 180);
+      if (goingDown && current > 180) setMenuOpen(false);
+
+      lastScrollY.current = current;
+    };
+
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -19,31 +32,33 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+      className={`fixed inset-x-0 top-0 z-50 transition-[translate,background-color,border-color,backdrop-filter] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        hidden ? "-translate-y-full" : "translate-y-0"
+      } ${
         scrolled
           ? "border-b border-navy-100 bg-white/90 backdrop-blur-lg"
           : "border-b border-transparent bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-10">
+      <div className="shell flex h-20 items-center justify-between lg:h-24">
         <Link href="/" className="group flex flex-col leading-none">
           <span
-            className={`font-display text-2xl tracking-tight transition-colors duration-500 ${
+            className={`text-lg font-semibold tracking-tight transition-colors duration-500 ${
               scrolled ? "text-navy-900" : "text-white"
             }`}
           >
             {site.name}
           </span>
           <span
-            className={`mt-1 text-[10px] uppercase tracking-[0.28em] transition-colors duration-500 ${
-              scrolled ? "text-navy-400" : "text-white/60"
+            className={`eyebrow mt-1.5 transition-colors duration-500 ${
+              scrolled ? "text-navy-400" : "text-white/50"
             }`}
           >
             Negocios Inmobiliarios
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-10 md:flex">
+        <nav className="hidden items-center gap-12 md:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -94,7 +109,7 @@ export default function Header() {
           menuOpen ? "max-h-96 border-b" : "max-h-0"
         }`}
       >
-        <nav className="flex flex-col gap-1 px-6 py-4">
+        <nav className="shell flex flex-col gap-1 py-4">
           {navLinks.map((link) => (
             <Link
               key={link.href}

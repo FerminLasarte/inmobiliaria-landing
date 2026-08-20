@@ -44,13 +44,15 @@ Sin CSS tradicional, sin CDNs y sin librerías de UI: todo componentizado.
 
 ## Características
 
-- **100% responsive**, diseñado mobile-first (1 columna → 3 columnas en desktop).
+- **Diseñado para escritorio** y adaptado hacia abajo: la composición, la
+  escala tipográfica y el ritmo están pensados para pantallas grandes, y el
+  layout colapsa a una columna en tablet y teléfono sin perder nada.
 - **Header inteligente**: transparente sobre el hero, sólido con blur al
   scrollear, menú desplegable en mobile.
-- **Hero** con retrato circular, prueba social (años de trayectoria, matrícula)
-  y CTA animado a WhatsApp.
+- **Hero a pantalla completa** con retrato circular y CTA animado a WhatsApp.
 - **Grid de propiedades destacadas** con badges de operación, precio sobre la
   foto, ficha de ambientes y consulta pre-cargada por propiedad.
+- **Bloque de cierre oscuro**: contacto y footer comparten fondo, sin costura.
 - **Formulario de contacto sin backend**: arma el mensaje y abre WhatsApp listo
   para enviar.
 - **Botón flotante de WhatsApp** siempre accesible.
@@ -167,15 +169,25 @@ La paleta se define como tokens de Tailwind v4 en
 
 | Token        | Uso                                  |
 | ------------ | ------------------------------------ |
-| `navy-950`   | Fondo del hero y del footer          |
-| `navy-900`   | Texto principal, botones sólidos     |
-| `navy-500`   | Texto secundario                     |
-| `navy-100`   | Bordes y separadores                 |
-| `gray-50`    | Fondo de secciones alternas          |
+| `navy-950`   | Fondo del hero y del bloque de cierre |
+| `navy-900`   | Texto principal, botones sólidos      |
+| `navy-500`   | Texto secundario                      |
+| `navy-100`   | Bordes y separadores                  |
+| `navy-50`    | Fondo de la sección de propiedades    |
 
-Tipografías: **Inter** para el cuerpo (`font-sans`) e **Instrument Serif** para
-titulares (`font-display`), cargadas con `next/font` (sin FOUT ni requests a
-terceros en runtime).
+**Tipografía**: stack estilo Apple. En macOS e iOS resuelve a **San Francisco**
+(`-apple-system` / SF Pro), la misma familia de apple.com; en el resto de las
+plataformas cae en **Inter**, cargada con `next/font`. Los titulares usan
+tracking negativo (`-0.032em`) para replicar el ajuste óptico de SF.
+
+**Ritmo**: tres utilidades propias definidas con `@utility` en `globals.css` —
+`shell` (contenedor de hasta 1680 px con padding progresivo), `eyebrow`
+(rótulo de sección, 20 px) y `field-label` (etiqueta de campo o dato, 14 px).
+Las secciones respiran con `py-28` en mobile y hasta `py-44` en escritorio.
+
+**Escala**: los titulares suben un escalón a partir de 1536 px (`2xl:`) — el h1
+llega a 96 px y los h2 a 68 px — para que las pantallas grandes se sientan
+diseñadas y no solo estiradas.
 
 ## Formulario de contacto
 

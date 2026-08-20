@@ -2,13 +2,16 @@ import Link from "next/link";
 import { ReactNode } from "react";
 
 interface AnimatedButtonProps {
-  href: string;
+  /** Destino del enlace. Si se omite, el componente rinde un <button>. */
+  href?: string;
   text: string;
   icon?: ReactNode;
   size?: "sm" | "md" | "lg";
   variant?: "light" | "dark";
   /** Abre el destino en una pestaña nueva (links externos: WhatsApp, mapas). */
   external?: boolean;
+  /** Tipo del <button> cuando no hay href. */
+  type?: "button" | "submit";
 }
 
 export default function AnimatedButton({
@@ -18,6 +21,7 @@ export default function AnimatedButton({
   size = "md",
   variant = "light",
   external = false,
+  type = "button",
 }: AnimatedButtonProps) {
   const sizeClasses = {
     sm: "h-10 px-6 text-xs",
@@ -31,14 +35,10 @@ export default function AnimatedButton({
     ? "border-[#131623] bg-[#131623] text-white"
     : "border-white/20 bg-white/10 backdrop-blur-md text-white";
 
-  return (
-    <Link
-      href={href}
-      {...(external
-        ? { target: "_blank", rel: "noopener noreferrer" }
-        : {})}
-      className={`group relative flex w-full items-center justify-center overflow-hidden rounded-[48px] border font-bold transition-transform duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] hover:scale-[1.02] md:w-auto ${sizeClasses[size]} ${baseClasses}`}
-    >
+  const className = `group relative flex w-full items-center justify-center overflow-hidden rounded-[48px] border font-bold transition-transform duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] hover:scale-[1.02] md:w-auto ${sizeClasses[size]} ${baseClasses}`;
+
+  const content = (
+    <>
       {/* Capa de fondo animada (Siempre cae en blanco para contrastar) */}
       <span className="absolute inset-0 z-0 overflow-hidden rounded-[48px]">
         <span className="absolute inset-0 h-full w-full -translate-y-[101%] rounded-[48px] bg-white transition-all duration-500 ease-[cubic-bezier(0.4,0,0,1)] group-hover:translate-y-0 group-hover:rounded-none" />
@@ -61,6 +61,24 @@ export default function AnimatedButton({
           {text}
         </span>
       </span>
+    </>
+  );
+
+  if (!href) {
+    return (
+      <button type={type} className={className}>
+        {content}
+      </button>
+    );
+  }
+
+  return (
+    <Link
+      href={href}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      className={className}
+    >
+      {content}
     </Link>
   );
 }
