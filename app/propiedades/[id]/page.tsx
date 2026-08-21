@@ -78,7 +78,7 @@ export default async function PropiedadPage({
               columna de datos queda pegajosa: la galería es alta y sin eso el
               precio y el botón de consulta se pierden al bajar a mirar fotos.
             */}
-            <div className="mt-6 grid gap-10 lg:grid-cols-[1.5fr_1fr] lg:items-start lg:gap-14">
+            <div className="contained mt-6 grid gap-10 lg:grid-cols-[1.5fr_1fr] lg:items-start lg:gap-14">
               <PropertyGallery
                 images={property.images}
                 alt={property.imageAlt}
@@ -171,7 +171,7 @@ export default async function PropiedadPage({
                 />
               </Reveal>
 
-              <ul className="mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+              <ul className="mt-10 grid gap-6 grid-cols-[repeat(auto-fill,minmax(min(100%,340px),1fr))]">
                 {related.map((item) => (
                   <li key={item.id}>
                     <PropertyCard property={item} />

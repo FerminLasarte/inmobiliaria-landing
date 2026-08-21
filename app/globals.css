@@ -70,8 +70,21 @@
  * 21 %. `clamp()` reparte ese aire de forma proporcional en todo el rango.
  */
 @utility shell {
-  @apply mx-auto w-full max-w-[1680px];
+  @apply mx-auto w-full;
   padding-inline: var(--gutter);
+}
+
+/*
+ * Ancho de lectura. El `shell` ya no tiene tope —el contenido empieza a la
+ * distancia del margen y punto, como en apple.com/store—, pero hay bloques
+ * que no deben estirarse por más pantalla que haya: un formulario, una ficha,
+ * un texto corrido. Una línea de 2.300 px no se lee.
+ *
+ * Las grillas de tarjetas y el carril NO usan esto: ahí más pantalla tiene
+ * que significar más tarjetas, no tarjetas más grandes.
+ */
+@utility contained {
+  @apply w-full max-w-[1500px];
 }
 
 /*

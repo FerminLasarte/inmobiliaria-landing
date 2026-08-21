@@ -34,7 +34,12 @@ export default function Properties() {
         </Reveal>
       </div>
 
-      <Reveal className="mx-auto mt-10 w-full max-w-[1680px]">
+      {/*
+        Sin tope de ancho: el carril llega al borde de la pantalla y la primera
+        tarjeta se alinea con el título por el padding de --gutter que lleva
+        adentro. Con un `max-w` el carril arrancaba y terminaba en el margen.
+      */}
+      <Reveal className="mt-10 w-full">
         {/* Vidriera: una muestra. La cartera completa vive en /propiedades. */}
         <PropertyCarousel limit={8} />
       </Reveal>

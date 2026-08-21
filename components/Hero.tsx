@@ -33,7 +33,7 @@ export default function Hero() {
       </div>
 
       <div className="shell">
-        <div className="grid items-center gap-16 lg:grid-cols-[1fr_auto] lg:gap-24 2xl:gap-32">
+        <div className="contained grid items-center gap-16 lg:grid-cols-[1fr_auto] lg:gap-24 2xl:gap-32">
           {/* Columna de texto */}
           <div className="max-w-4xl">
             <p className="animate-rise text-[15px] font-medium text-white/45 motion-reduce:animate-none">{site.city}</p>

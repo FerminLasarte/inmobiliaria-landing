@@ -166,7 +166,7 @@ export default function PropertyExplorer() {
       </div>
 
       {results.length > 0 ? (
-        <ul className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+        <ul className="grid gap-6 grid-cols-[repeat(auto-fill,minmax(min(100%,340px),1fr))]">
           {results.map((property, index) => (
             <li key={property.id}>
               <PropertyCard property={property} priority={index < 3} />

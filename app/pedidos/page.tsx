@@ -46,7 +46,7 @@ export default function PedidosPage() {
             />
           </Reveal>
 
-          <div className="mt-12 grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-start lg:gap-20">
+          <div className="contained mt-12 grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-start lg:gap-20">
             <Reveal>
               <p className="max-w-lg text-[17px] leading-relaxed text-white/60">
                 Buena parte de lo que se vende en Tandil no llega a publicarse.
