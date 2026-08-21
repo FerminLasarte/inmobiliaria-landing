@@ -33,8 +33,14 @@ const INITIAL_STATE: ContactFormState = {
 
 const labelClasses = "field-label block text-white/45";
 
+/*
+ * `block` no es cosmético: los campos son `inline-block` por defecto y se
+ * alinean por la línea base, así que el navegador reserva el espacio del
+ * descendente debajo del borde. En el <textarea> eso abría 6 px muertos entre
+ * la línea inferior y el campo siguiente, y rompía el ritmo del formulario.
+ */
 const fieldClasses =
-  "mt-4 w-full rounded-none border-0 border-b border-white/15 bg-transparent pb-3.5 text-[17px] text-white outline-none transition-colors placeholder:text-white/25 focus:border-white/60";
+  "mt-4 block w-full rounded-none border-0 border-b border-white/15 bg-transparent pb-3.5 text-[17px] text-white outline-none transition-colors placeholder:text-white/25 focus:border-white/60";
 
 export default function ContactForm() {
   const [form, setForm] = useState<ContactFormState>(INITIAL_STATE);
@@ -69,45 +75,61 @@ export default function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-3xl bg-white/[0.04] p-8 ring-1 ring-white/10 sm:p-10 lg:p-12"
+      /*
+        Mismo radio que la ficha de propiedad. El borde acá sí se queda: sobre
+        el navy oscuro, `ring-white/10` es la única separación entre el panel y
+        el fondo —no hay sombra que la dé, como sí pasa en la ficha.
+      */
+      className="@container rounded-panel bg-white/[0.04] p-8 ring-1 ring-white/10 sm:p-10 lg:p-12"
     >
       <h3 className="text-2xl text-white">Escribinos</h3>
       <p className="mt-3 text-base text-white/50">
         Respondemos personalmente. Sin call centers ni respuestas automáticas.
       </p>
 
-      <div className="mt-12 space-y-10">
-        <div>
-          <label htmlFor="name" className={labelClasses}>
-            Nombre
-          </label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            required
-            autoComplete="name"
-            value={form.name}
-            onChange={handleChange}
-            placeholder="Tu nombre y apellido"
-            className={fieldClasses}
-          />
-        </div>
+      <div className="mt-10 space-y-8">
+        {/*
+          Nombre y contacto comparten fila, pero recién cuando hay lugar de
+          verdad. La consulta es de contenedor y no de viewport a propósito:
+          el panel vive en una columna de la grilla y a 1024 px mide ~294 px
+          por dentro, donde dos columnas quedarían de 127 px y el placeholder
+          no entraría. Con `@md` se parten solo por encima de 448 px de ancho
+          propio, así que en una tablet a pantalla completa se parten y en una
+          columna angosta de escritorio se siguen apilando.
+        */}
+        <div className="grid gap-8 @md:grid-cols-2">
+          <div>
+            <label htmlFor="name" className={labelClasses}>
+              Nombre
+            </label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              required
+              autoComplete="name"
+              value={form.name}
+              onChange={handleChange}
+              placeholder="Tu nombre y apellido"
+              className={fieldClasses}
+            />
+          </div>
 
-        <div>
-          <label htmlFor="contact" className={labelClasses}>
-            Teléfono o email
-          </label>
-          <input
-            id="contact"
-            name="contact"
-            type="text"
-            autoComplete="tel"
-            value={form.contact}
-            onChange={handleChange}
-            placeholder="Para poder responderte"
-            className={fieldClasses}
-          />
+          <div>
+            <label htmlFor="contact" className={labelClasses}>
+              Teléfono o email
+            </label>
+            <input
+              id="contact"
+              name="contact"
+              type="text"
+              autoComplete="tel"
+              value={form.contact}
+              onChange={handleChange}
+              placeholder="Para poder responderte"
+              className={fieldClasses}
+            />
+          </div>
         </div>
 
         <div>
@@ -143,7 +165,10 @@ export default function ContactForm() {
           <textarea
             id="message"
             name="message"
-            rows={3}
+            /* Dos filas alcanzan para el ritmo del formulario: con tres el
+               campo quedaba muy por encima del resto y abría un hueco vacío
+               entre la etiqueta y la línea inferior. */
+            rows={2}
             value={form.message}
             onChange={handleChange}
             placeholder="Contanos qué estás buscando"

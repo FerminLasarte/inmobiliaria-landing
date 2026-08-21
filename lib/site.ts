@@ -25,7 +25,7 @@ export const site = {
   license: "T° VII F° 19 Mat. 1728",
   city: "Tandil, Buenos Aires",
   address: "Alem 1126 — Timbre 1",
-  phoneLabel: "249 421 7311",
+  phoneLabel: "+54 9 249 421-7311",
   /** Formato internacional sin signos, requerido por wa.me */
   phoneRaw: "5492494217311",
   since: 2017,

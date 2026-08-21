@@ -56,17 +56,28 @@ export default function PropertyCarousel() {
     "flex h-11 w-11 items-center justify-center rounded-full bg-navy-900/85 text-white backdrop-blur transition-all duration-300 hover:bg-navy-900 hover:scale-105 disabled:pointer-events-none disabled:opacity-0";
 
   return (
-    <div className="relative">
+    /*
+      Los márgenes negativos devuelven el aire que el carril agrega con su
+      padding vertical: el colchón existe para que la tarjeta respire al hacer
+      hover, no para separar la sección de lo que viene después.
+    */
+    <div className="relative -mb-5 -mt-3">
       {/*
         El scroll-padding tiene que igualar al padding del carril: sin él,
         scroll-snap ignora el espacio inicial y la primera tarjeta arranca
         pegada al borde, desalineada del título.
+
+        El padding vertical no es decorativo: `overflow-x-auto` obliga al
+        navegador a calcular `overflow-y: auto`, así que el carril recorta todo
+        lo que sobresalga de la altura de la tarjeta. Al escalar 1 % la tarjeta
+        crece ~3,5 px por lado, y la sombra suma su desenfoque: hacen falta
+        ~7,5 px arriba y ~15,5 px abajo.
       */}
       <div
         ref={trackRef}
-        className="no-scrollbar snap-x snap-mandatory overflow-x-auto scroll-smooth scroll-pl-6 sm:scroll-pl-10 lg:scroll-pl-16 2xl:scroll-pl-24"
+        className="no-scrollbar snap-x snap-mandatory overflow-x-auto scroll-smooth pb-5 pt-3 scroll-pl-[var(--gutter)]"
       >
-        <ul className="flex gap-6 pl-6 sm:pl-10 lg:pl-16 2xl:pl-24">
+        <ul className="flex gap-6 pl-[var(--gutter)]">
           {properties.map((property, index) => (
             <li
               key={property.id}
@@ -75,23 +86,24 @@ export default function PropertyCarousel() {
                 nunca se achican por debajo de su mínimo: con muchas fichas el
                 carril desborda y se vuelve navegable.
               */
-              className="min-w-[80vw] shrink-0 grow basis-[80vw] snap-start sm:min-w-[380px] sm:basis-[380px] lg:min-w-[440px] lg:basis-[440px]"
+              className="min-w-[80vw] shrink-0 grow basis-[80vw] snap-start sm:min-w-[340px] sm:basis-[340px] lg:min-w-[400px] lg:basis-[400px]"
             >
               <PropertyCard property={property} priority={index === 0} />
             </li>
           ))}
 
           {/* Cierra el carril con el mismo aire que abre a la izquierda. */}
-          <li
-            aria-hidden="true"
-            className="w-6 shrink-0 sm:w-10 lg:w-16 2xl:w-24"
-          />
+          <li aria-hidden="true" className="w-[var(--gutter)] shrink-0" />
         </ul>
       </div>
 
-      {/* Flechas: solo en desktop, el mobile se navega con el dedo */}
+      {/*
+        Flechas: solo en desktop, el mobile se navega con el dedo. El recorte
+        vertical acompaña al padding del carril para que queden centradas contra
+        la tarjeta y no contra el colchón del hover.
+      */}
       <div
-        className={`pointer-events-none absolute inset-y-0 left-0 right-0 items-center justify-between px-4 2xl:px-10 ${
+        className={`pointer-events-none absolute bottom-5 left-0 right-0 top-3 items-center justify-between px-4 2xl:px-10 ${
           scrollable ? "hidden md:flex" : "hidden"
         }`}
       >

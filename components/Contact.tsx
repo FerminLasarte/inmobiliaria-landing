@@ -2,29 +2,25 @@ import Link from "next/link";
 
 import ContactForm from "@/components/ContactForm";
 import Reveal from "@/components/Reveal";
+import SectionHeading from "@/components/SectionHeading";
 import { contactDetails } from "@/lib/site";
 
 export default function Contact() {
   return (
     <section
       id="contacto"
-      className="scroll-mt-24 bg-navy-950 py-28 text-white sm:py-36 lg:py-44"
+      className="section-y scroll-mt-24 bg-navy-950 text-white"
     >
       <div className="shell">
-        <div className="grid gap-16 lg:grid-cols-[1fr_1fr] lg:gap-24 2xl:gap-32">
+        <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
           <Reveal className="max-w-xl">
-            <p className="eyebrow text-white/50">Contacto</p>
+            <SectionHeading
+              tone="dark"
+              title="Conversemos sobre tu próximo paso."
+              lead="Sin compromiso, en la oficina o donde te quede cómodo."
+            />
 
-            <h2 className="mt-8 text-4xl leading-[1.08] text-white sm:text-5xl lg:text-6xl 2xl:text-[4.25rem]">
-              Conversemos sobre tu próximo paso.
-            </h2>
-
-            <p className="mt-8 text-lg leading-relaxed text-white/55 2xl:text-xl">
-              Contanos qué necesitás y coordinamos una charla sin compromiso, en
-              la oficina o donde te quede más cómodo.
-            </p>
-
-            <dl className="mt-16 space-y-10">
+            <dl className="mt-10 space-y-7">
               {contactDetails.map((detail) => {
                 const value = detail.href ? (
                   <Link
@@ -51,7 +47,7 @@ export default function Contact() {
                     />
                     <div>
                       <dt className="field-label text-white/45">{detail.label}</dt>
-                      <dd className="mt-3 text-xl text-white">{value}</dd>
+                      <dd className="mt-1.5 text-[17px] text-white">{value}</dd>
                     </div>
                   </div>
                 );

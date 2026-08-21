@@ -12,6 +12,8 @@ interface AnimatedButtonProps {
   external?: boolean;
   /** Tipo del <button> cuando no hay href. */
   type?: "button" | "submit";
+  /** Clases extra del contenedor (ancho, transiciones propias del contexto). */
+  className?: string;
 }
 
 export default function AnimatedButton({
@@ -22,6 +24,7 @@ export default function AnimatedButton({
   variant = "light",
   external = false,
   type = "button",
+  className: extraClasses = "",
 }: AnimatedButtonProps) {
   const sizeClasses = {
     sm: "h-10 px-6 text-xs",
@@ -35,7 +38,15 @@ export default function AnimatedButton({
     ? "border-[#131623] bg-[#131623] text-white"
     : "border-white/20 bg-white/10 backdrop-blur-md text-white";
 
-  const className = `group relative flex w-full items-center justify-center overflow-hidden rounded-[48px] border font-bold transition-transform duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] hover:scale-[1.02] md:w-auto ${sizeClasses[size]} ${baseClasses}`;
+  /*
+   * `cursor-pointer`: los navegadores le dan `cursor: default` a <button> y
+   * Preflight no lo corrige, así que sin esto la variante <button> (el submit
+   * del formulario) no se siente apretable.
+   *
+   * La transición incluye los colores —y no solo `transform`— porque el header
+   * cambia la variante del botón al scrollear y el salto tiene que acompañar.
+   */
+  const className = `group relative flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-[48px] border font-bold transition-[scale,background-color,border-color,color] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:scale-[1.02] md:w-auto ${sizeClasses[size]} ${baseClasses} ${extraClasses}`;
 
   const content = (
     <>
@@ -47,14 +58,14 @@ export default function AnimatedButton({
       {/* Contenedor de texto e icono */}
       <span className="relative z-10 flex items-center gap-2.5 overflow-hidden">
         {/* Texto original que baja y desaparece */}
-        <span className="flex items-center gap-2.5 transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-[160%]">
+        <span className="flex items-center gap-2.5 transition-[translate] duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-[160%]">
           {icon}
           {text}
         </span>
 
         {/* Texto nuevo que cae y toma el lugar (Siempre negro porque el fondo hover es blanco) */}
         <span
-          className="absolute inset-0 flex items-center justify-center gap-2.5 text-[#131623] transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] -translate-y-[160%] group-hover:translate-y-0"
+          className="absolute inset-0 flex items-center justify-center gap-2.5 text-[#131623] transition-[translate] duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] -translate-y-[160%] group-hover:translate-y-0"
           aria-hidden="true"
         >
           {icon}

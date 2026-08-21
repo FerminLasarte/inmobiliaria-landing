@@ -45,7 +45,7 @@ export default function ValueFlow() {
         className="absolute bottom-3 left-0 top-3 w-px overflow-hidden"
       >
         <div
-          className={`js-reveal-line h-full w-px origin-top bg-navy-200 transition-transform duration-[1800ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:scale-y-100 motion-reduce:transition-none ${
+          className={`js-reveal-line h-full w-px origin-top bg-navy-200 transition-[scale] duration-[1800ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:scale-y-100 motion-reduce:transition-none ${
             active ? "scale-y-100" : "scale-y-0"
           }`}
         />
