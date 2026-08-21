@@ -11,7 +11,13 @@ import { properties } from "@/lib/site";
  * flechas en desktop. La tarjeta siguiente asoma en el borde para dejar claro
  * que la cartera continúa.
  */
-export default function PropertyCarousel() {
+interface PropertyCarouselProps {
+  /** Cuántas mostrar. Un número y no la lista: los iconos son funciones. */
+  limit?: number;
+}
+
+export default function PropertyCarousel({ limit }: PropertyCarouselProps) {
+  const items = limit ? properties.slice(0, limit) : properties;
   const trackRef = useRef<HTMLDivElement>(null);
   const [atStart, setAtStart] = useState<boolean>(true);
   const [atEnd, setAtEnd] = useState<boolean>(false);
@@ -78,7 +84,7 @@ export default function PropertyCarousel() {
         className="no-scrollbar snap-x snap-mandatory overflow-x-auto scroll-smooth pb-5 pt-3 scroll-pl-[var(--gutter)]"
       >
         <ul className="flex gap-6 pl-[var(--gutter)]">
-          {properties.map((property, index) => (
+          {items.map((property, index) => (
             <li
               key={property.id}
               /*

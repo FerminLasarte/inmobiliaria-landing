@@ -4,21 +4,31 @@ import type { LucideIcon } from "lucide-react";
 export type PropertyOperation = "Venta" | "Alquiler" | "Emprendimiento";
 
 /** Tipología edilicia de la propiedad. */
-export type PropertyType = "Casa" | "Departamento" | "PH" | "Terreno" | "Local";
+export type PropertyType = "Casa" | "Departamento" | "Lote" | "Local";
 
-/** Ficha técnica de una propiedad destacada del portfolio. */
+/**
+ * Ficha de una propiedad. Todo el contenido sale de la ficha real publicada
+ * en ortiznegociosinmobiliarios.com.ar; nada está inventado.
+ *
+ * La dirección hace de título —es el identificador que usa la inmobiliaria—
+ * y `summary` es la bajada que acompaña a la dirección en el origen.
+ */
 export interface Property {
   id: string;
-  title: string;
   operation: PropertyOperation;
   type: PropertyType;
-  neighborhood: string;
   address: string;
   price: string;
-  /** Ruta pública de la imagen dentro de /public. */
-  image: string;
+  /** Bajada corta: la frase que resume la propiedad. */
+  summary: string;
+  /** Texto largo de "Información detallada". */
+  description: string;
+  /** Galería, rutas públicas dentro de /public. La primera es la portada. */
+  images: string[];
   imageAlt: string;
   features: PropertyFeature[];
+  /** Ficha original, por si hace falta contrastar el dato. */
+  sourceUrl: string;
   /** Destaca la tarjeta con un acento visual. */
   highlighted?: boolean;
 }

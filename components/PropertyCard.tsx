@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, MapPin } from "lucide-react";
 
-import { whatsappUrl } from "@/lib/site";
 import type { Property } from "@/types";
 
 interface PropertyCardProps {
@@ -15,42 +14,28 @@ export default function PropertyCard({
   property,
   priority = false,
 }: PropertyCardProps) {
-  const inquiry = whatsappUrl(
-    `Hola Agustín, me interesa la propiedad "${property.title}" en ${property.address}. ¿Podemos coordinar una visita?`,
-  );
-
   return (
     /*
-      Hover calcado del de las tarjetas de apple.com/store (`.rf-ccard-content`):
-      la tarjeta no se levanta, se escala un 1 %, y la sombra ya existe en
-      reposo y solo se profundiza. 300 ms con la curva de salida de Apple.
-      Al escalar la tarjeta entera, la foto acompaña sin animación propia:
-      es la misma transformación, así que no pueden desincronizarse.
+      La tarjeta entera es el enlace, no solo el pie: un único destino por
+      ficha, un solo foco de teclado, y toda la superficie es clickeable.
+      Por eso el "Ver propiedad" de abajo es un <span> y no otro <a>.
 
-      Sin borde, también como Apple: el canto lo define la sombra. El `ring`
-      que había era navy-100 sobre un fondo casi del mismo valor y no llegaba
-      a leerse; arriba, además, el borde ya lo marca la propia foto.
+      Hover calcado del de apple.com/store (`.rf-ccard-content`): no se
+      levanta, escala 1 %, 300 ms, y la sombra ya existe en reposo y solo se
+      profundiza. Al escalar la tarjeta entera, la foto acompaña sin animación
+      propia: es la misma transformación, no pueden desincronizarse.
     */
-    <article className="group flex h-full flex-col overflow-hidden rounded-panel bg-white shadow-[2px_4px_12px_rgba(0,0,0,0.08)] transition-[scale,box-shadow] duration-300 ease-[cubic-bezier(0,0,0.5,1)] hover:scale-[1.01] hover:shadow-[2px_4px_16px_rgba(0,0,0,0.16)] motion-reduce:transition-none motion-reduce:hover:scale-100">
-      {/*
-        4:3 en vez de 4:5 / cuadrado: la foto se llevaba el 79 % de la altura
-        de la ficha y empujaba los datos fuera de la pantalla. Con esta
-        proporción la ficha entera entra en el alto del viewport y se lee
-        precio, dirección y ambientes sin scrollear.
-      */}
+    <Link
+      href={`/propiedades/${property.id}`}
+      className="group flex h-full flex-col overflow-hidden rounded-panel bg-white shadow-[2px_4px_12px_rgba(0,0,0,0.08)] transition-[scale,box-shadow] duration-300 ease-[cubic-bezier(0,0,0.5,1)] hover:scale-[1.01] hover:shadow-[2px_4px_16px_rgba(0,0,0,0.16)] motion-reduce:transition-none motion-reduce:hover:scale-100"
+    >
       <div className="relative aspect-[4/3] overflow-hidden bg-navy-100">
         <Image
-          src={property.image}
+          src={property.images[0]}
           alt={property.imageAlt}
           fill
           priority={priority}
           sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 30vw"
-          /*
-            Sin zoom propio, a propósito: la foto se agranda porque se escala
-            la tarjeta que la contiene, igual que en apple.com/store. Antes
-            tenía su propia animación de 900 ms contra 500 ms de la tarjeta y
-            el zoom seguía creciendo cuando la tarjeta ya se había frenado.
-          */
           className="object-cover"
         />
 
@@ -76,13 +61,20 @@ export default function PropertyCard({
       </div>
 
       <div className="flex flex-1 flex-col p-6">
-        <h3 className="text-[17px] font-semibold leading-snug text-navy-900">
-          {property.title}
+        {/*
+          La dirección titula la ficha, igual que en el sitio de origen: es el
+          identificador que la inmobiliaria usa para cada propiedad.
+        */}
+        <h3 className="flex items-start gap-1.5 text-[17px] font-semibold leading-snug text-navy-900">
+          <MapPin
+            className="mt-[3px] h-4 w-4 shrink-0 text-navy-400"
+            strokeWidth={1.75}
+          />
+          {property.address}
         </h3>
 
-        <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-navy-500">
-          <MapPin className="h-3.5 w-3.5 shrink-0" strokeWidth={1.75} />
-          {property.address} · {property.neighborhood}
+        <p className="mt-2 line-clamp-2 text-[13px] leading-relaxed text-navy-500">
+          {property.summary}
         </p>
 
         {/* Sin línea divisoria: la separación la da el aire, no un borde. */}
@@ -101,19 +93,14 @@ export default function PropertyCard({
           ))}
         </ul>
 
-        <Link
-          href={inquiry}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-auto flex items-center gap-1.5 pt-5 text-[13px] font-semibold text-navy-900 transition-colors hover:text-navy-500"
-        >
-          Consultar disponibilidad
+        <span className="mt-auto flex items-center gap-1.5 pt-5 text-[13px] font-semibold text-navy-900 transition-colors group-hover:text-navy-500">
+          Ver propiedad
           <ArrowUpRight
             className="h-3.5 w-3.5 transition-[translate] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
             strokeWidth={2}
           />
-        </Link>
+        </span>
       </div>
-    </article>
+    </Link>
   );
 }

@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Menu, MessageCircle, X } from "lucide-react";
 
-import AnimatedButton from "@/components/AnimatedButton";
 import Logo from "@/components/Logo";
 import { navLinks, site, whatsappUrl } from "@/lib/site";
 
@@ -13,6 +13,19 @@ export default function Header() {
   const [hidden, setHidden] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const lastScrollY = useRef<number>(0);
+  const pathname = usePathname();
+
+  /*
+   * El header arranca transparente —texto blanco— solo donde lo que hay
+   * detrás es oscuro: el hero del inicio y la página de pedidos. En las
+   * rutas de fondo claro arranca sólido, porque en transparente quedaba
+   * blanco sobre blanco, es decir invisible.
+   *
+   * La condición mira la ruta y no el scroll porque el header es fijo y
+   * necesita saber el tono del fondo antes de que el usuario se mueva.
+   */
+  const darkBehind = pathname === "/" || pathname === "/pedidos";
+  const solid = scrolled || !darkBehind;
 
   useEffect(() => {
     const onScroll = () => {
@@ -37,35 +50,33 @@ export default function Header() {
       className={`fixed inset-x-0 top-0 z-50 transition-[translate,background-color,border-color,backdrop-filter] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
         hidden ? "-translate-y-full" : "translate-y-0"
       } ${
-        scrolled
+        solid
           ? "border-b border-navy-100 bg-white/90 backdrop-blur-lg"
           : "border-b border-transparent bg-transparent"
       }`}
     >
-      <div className="shell flex h-20 items-center justify-between lg:h-24">
-        <Link href="/" className="group flex items-center gap-3.5">
+      <div className="shell flex h-14 items-center justify-between lg:h-16">
+        <Link href="/" className="group flex items-center gap-2.5">
           <Logo
-            className={`h-9 w-auto shrink-0 transition-colors duration-500 lg:h-10 ${
-              scrolled ? "text-navy-900" : "text-white"
+            className={`h-6 w-auto shrink-0 transition-colors duration-500 ${
+              solid ? "text-navy-900" : "text-white"
             }`}
           />
 
           {/*
-            El subtítulo no usa `eyebrow`: ese rótulo mide 20 px y dejaba a
-            "Negocios Inmobiliarios" más grande que el propio nombre. Acá la
-            jerarquía la marca el contraste de tamaño y de peso.
+            Lockup en una línea. Apilar nombre y bajada obligaba a una barra de
+            80 px de alto; acá el subtítulo sigue al nombre y la barra baja a
+            56. La jerarquía la marcan el peso y el color, no el tamaño.
           */}
-          <span className="flex flex-col leading-none">
+          <span
+            className={`text-[15px] font-semibold tracking-[-0.015em] transition-colors duration-500 ${
+              solid ? "text-navy-900" : "text-white"
+            }`}
+          >
+            {site.name}
             <span
-              className={`text-xl font-semibold tracking-[-0.02em] transition-colors duration-500 lg:text-[1.375rem] ${
-                scrolled ? "text-navy-900" : "text-white"
-              }`}
-            >
-              {site.name}
-            </span>
-            <span
-              className={`mt-2 text-[12px] font-medium tracking-[-0.005em] transition-colors duration-500 lg:text-[13px] ${
-                scrolled ? "text-navy-400" : "text-white/45"
+              className={`ml-2 hidden font-normal transition-colors duration-500 lg:inline ${
+                solid ? "text-navy-400" : "text-white/40"
               }`}
             >
               Negocios Inmobiliarios
@@ -73,33 +84,26 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-12 md:flex">
+        {/*
+          Sin el botón del teléfono: "Contacto" ya estaba en la navegación y
+          lleva a la misma sección, donde el número figura completo. El pill
+          repetía ese destino y era lo que más alto agregaba a la barra. El
+          acceso directo a WhatsApp sigue disponible en el botón flotante.
+        */}
+        <nav className="hidden items-center gap-9 md:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`relative text-sm font-medium transition-colors duration-300 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full ${
-                scrolled
+              className={`relative text-[13px] font-medium transition-colors duration-300 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full ${
+                solid
                   ? "text-navy-600 hover:text-navy-900"
-                  : "text-white/80 hover:text-white"
+                  : "text-white/70 hover:text-white"
               }`}
             >
               {link.label}
             </Link>
           ))}
-
-          {/*
-            Mismo botón que el resto del sitio: la variante sigue al header,
-            oscura sobre fondo blanco y translúcida sobre el hero.
-          */}
-          <AnimatedButton
-            href={whatsappUrl()}
-            text={site.phoneLabel}
-            size="sm"
-            variant={scrolled ? "dark" : "light"}
-            external
-            icon={<MessageCircle className="h-4 w-4" strokeWidth={2} />}
-          />
         </nav>
 
         <button
@@ -107,12 +111,12 @@ export default function Header() {
           onClick={() => setMenuOpen((open) => !open)}
           aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
           aria-expanded={menuOpen}
-          className={`md:hidden ${scrolled ? "text-navy-900" : "text-white"}`}
+          className={`-mr-1 p-1 md:hidden ${solid ? "text-navy-900" : "text-white"}`}
         >
           {menuOpen ? (
-            <X className="h-6 w-6" strokeWidth={1.5} />
+            <X className="h-5 w-5" strokeWidth={1.75} />
           ) : (
-            <Menu className="h-6 w-6" strokeWidth={1.5} />
+            <Menu className="h-5 w-5" strokeWidth={1.75} />
           )}
         </button>
       </div>

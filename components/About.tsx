@@ -7,7 +7,7 @@ export default function About() {
   return (
     <section
       id="nosotros"
-      className="section-y scroll-mt-24 bg-white"
+      className="section-y scroll-mt-20 bg-white"
     >
       <div className="shell">
         <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">

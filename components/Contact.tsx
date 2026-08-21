@@ -9,7 +9,7 @@ export default function Contact() {
   return (
     <section
       id="contacto"
-      className="section-y scroll-mt-24 bg-navy-950 text-white"
+      className="section-y scroll-mt-20 bg-navy-950 text-white"
     >
       <div className="shell">
         <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">

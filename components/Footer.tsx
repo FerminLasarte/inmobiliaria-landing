@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import InstagramIcon from "@/components/InstagramIcon";
 import Logo from "@/components/Logo";
 import { navLinks, site, whatsappUrl } from "@/lib/site";
 
@@ -20,6 +21,19 @@ export default function Footer() {
               Primero las personas, después las propiedades. Asesoramiento
               inmobiliario en Tandil desde {site.since}.
             </p>
+
+            <Link
+              href={site.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group mt-7 inline-flex items-center gap-2 text-[15px] text-white/60 transition-colors hover:text-white"
+            >
+              <InstagramIcon
+                className="h-4 w-4 transition-[scale] duration-300 group-hover:scale-110"
+                strokeWidth={1.75}
+              />
+              {site.instagramHandle}
+            </Link>
           </div>
 
           <nav>
