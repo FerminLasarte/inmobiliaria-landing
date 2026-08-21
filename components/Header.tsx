@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Menu, MessageCircle, X } from "lucide-react";
 
+import AnimatedButton from "@/components/AnimatedButton";
+import Logo from "@/components/Logo";
 import { navLinks, site, whatsappUrl } from "@/lib/site";
 
 export default function Header() {
@@ -41,20 +43,33 @@ export default function Header() {
       }`}
     >
       <div className="shell flex h-20 items-center justify-between lg:h-24">
-        <Link href="/" className="group flex flex-col leading-none">
-          <span
-            className={`text-lg font-semibold tracking-tight transition-colors duration-500 ${
+        <Link href="/" className="group flex items-center gap-3.5">
+          <Logo
+            className={`h-9 w-auto shrink-0 transition-colors duration-500 lg:h-10 ${
               scrolled ? "text-navy-900" : "text-white"
             }`}
-          >
-            {site.name}
-          </span>
-          <span
-            className={`eyebrow mt-1.5 transition-colors duration-500 ${
-              scrolled ? "text-navy-400" : "text-white/50"
-            }`}
-          >
-            Negocios Inmobiliarios
+          />
+
+          {/*
+            El subtítulo no usa `eyebrow`: ese rótulo mide 20 px y dejaba a
+            "Negocios Inmobiliarios" más grande que el propio nombre. Acá la
+            jerarquía la marca el contraste de tamaño y de peso.
+          */}
+          <span className="flex flex-col leading-none">
+            <span
+              className={`text-xl font-semibold tracking-[-0.02em] transition-colors duration-500 lg:text-[1.375rem] ${
+                scrolled ? "text-navy-900" : "text-white"
+              }`}
+            >
+              {site.name}
+            </span>
+            <span
+              className={`mt-2 text-[12px] font-medium tracking-[-0.005em] transition-colors duration-500 lg:text-[13px] ${
+                scrolled ? "text-navy-400" : "text-white/45"
+              }`}
+            >
+              Negocios Inmobiliarios
+            </span>
           </span>
         </Link>
 
@@ -73,19 +88,18 @@ export default function Header() {
             </Link>
           ))}
 
-          <Link
+          {/*
+            Mismo botón que el resto del sitio: la variante sigue al header,
+            oscura sobre fondo blanco y translúcida sobre el hero.
+          */}
+          <AnimatedButton
             href={whatsappUrl()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:scale-[1.03] ${
-              scrolled
-                ? "border-navy-900 bg-navy-900 text-white"
-                : "border-white/30 bg-white/10 text-white backdrop-blur-md"
-            }`}
-          >
-            <MessageCircle className="h-4 w-4" strokeWidth={2} />
-            {site.phoneLabel}
-          </Link>
+            text={site.phoneLabel}
+            size="sm"
+            variant={scrolled ? "dark" : "light"}
+            external
+            icon={<MessageCircle className="h-4 w-4" strokeWidth={2} />}
+          />
         </nav>
 
         <button

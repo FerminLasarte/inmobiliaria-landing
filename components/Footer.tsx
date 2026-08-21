@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import Logo from "@/components/Logo";
 import { navLinks, site, whatsappUrl } from "@/lib/site";
 
 export default function Footer() {
@@ -10,7 +11,10 @@ export default function Footer() {
       <div className="shell">
         <div className="grid gap-12 border-t border-white/10 py-16 md:grid-cols-[1.4fr_1fr_1fr] md:gap-16 lg:py-20">
           <div>
-            <p className="text-xl font-semibold tracking-tight">{site.name}</p>
+            <Logo className="h-12 w-auto text-white" />
+            <p className="mt-6 text-xl font-semibold tracking-tight">
+              {site.name}
+            </p>
             <p className="mt-2 text-sm text-white/40">{site.agency}</p>
             <p className="mt-7 max-w-sm text-[15px] leading-relaxed text-white/45">
               Primero las personas, después las propiedades. Asesoramiento

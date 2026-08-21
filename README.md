@@ -212,7 +212,7 @@ funciona en cualquier hosting compatible con Next.js.
 ## Datos del negocio
 
 - **Oficina:** Alem 1126 — Timbre 1, Tandil, Buenos Aires
-- **WhatsApp:** 249 421 7311
+- **WhatsApp:** +54 9 249 421-7311
 - **Matrícula:** T° VII F° 19 Mat. 1728
 - **Trayectoria:** en el rubro desde 2017
 

@@ -19,6 +19,13 @@
    * (SF Pro), la misma familia que usa apple.com. En el resto de las
    * plataformas cae en Inter, que comparte proporciones y altura de x.
    */
+  /*
+   * Radio de las superficies tipo panel: la ficha de propiedad y el panel del
+   * formulario. Es un token y no un valor suelto porque son las dos únicas
+   * superficies de este tipo y tienen que moverse juntas.
+   */
+  --radius-panel: 18px;
+
   --animate-rise: rise 1s cubic-bezier(0.16, 1, 0.3, 1) both;
 
   @keyframes rise {
@@ -32,14 +39,69 @@
     }
   }
 
+  /*
+   * Subrayado ondulado de la palabra destacada del hero: se traza de izquierda
+   * a derecha, como dibujado a mano, cuando el título terminó de entrar.
+   * El path declara `pathLength="1"`, así que el recorrido queda normalizado
+   * y la animación no depende del largo real de la palabra ni del viewBox.
+   */
+  --animate-squiggle: squiggle-draw 1.1s cubic-bezier(0.32, 0.72, 0.4, 1) 850ms
+    both;
+
+  @keyframes squiggle-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
   --font-sans:
     -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
     "Helvetica Neue", var(--font-inter), "Segoe UI", Roboto, sans-serif;
 }
 
-/* Contenedor ancho: aprovecha la pantalla en lugar de encajonar el contenido. */
+/*
+ * Contenedor ancho. El margen lateral es fluido y no escalonado: con
+ * breakpoints, todo el rango de 1024 a 1870 px recibía el mismo padding de
+ * 64 px, así que en una pantalla de 14" el contenido llegaba casi al borde
+ * (4 % de aire por lado) mientras que en un 27" el tope de 1680 px dejaba
+ * 21 %. `clamp()` reparte ese aire de forma proporcional en todo el rango.
+ */
 @utility shell {
-  @apply mx-auto w-full max-w-[1680px] px-6 sm:px-10 lg:px-16 2xl:px-24;
+  @apply mx-auto w-full max-w-[1680px];
+  padding-inline: var(--gutter);
+}
+
+/*
+ * Ritmo vertical de sección, fluido por el mismo motivo: 176 px fijos de aire
+ * arriba y abajo pesan distinto en un portátil que en un monitor grande.
+ */
+@utility section-y {
+  padding-block: clamp(4.5rem, 9vw, 11rem);
+}
+
+/*
+ * Escala tipográfica de display. Antes saltaba de 72 px a 96 px recién en
+ * 1536 px, así que un portátil de 14" mostraba el título más grande en
+ * proporción (4,76 % del ancho) que un 27" (3,75 %). Ahora interpola.
+ */
+@utility display-1 {
+  font-size: clamp(3rem, 0.5rem + 3.45vw, 6rem);
+  line-height: 1.02;
+}
+
+/*
+ * Encabezado de sección. Chico a propósito: antes medía 49 px y, sumado al
+ * rótulo y al párrafo aparte, empujaba las tarjetas casi 500 px hacia abajo.
+ * Apple resuelve la misma jerarquía en 28 px poniendo título y bajada en la
+ * misma línea, y de ahí a las tarjetas hay 57 px.
+ */
+@utility display-2 {
+  font-size: clamp(1.5rem, 0.6rem + 1.3vw, 2.25rem);
+  line-height: 1.2;
+  letter-spacing: -0.022em;
 }
 
 /*
@@ -66,6 +128,15 @@
 }
 
 @layer base {
+  :root {
+    /*
+     * Margen lateral único de la página. Lo comparten el `shell` y el carril
+     * del carrusel: si cada uno llevara su propia escala, la primera tarjeta
+     * dejaría de estar alineada con el título de la sección.
+     */
+    --gutter: clamp(1.25rem, 8vw, 8rem);
+  }
+
   html {
     scroll-behavior: smooth;
   }

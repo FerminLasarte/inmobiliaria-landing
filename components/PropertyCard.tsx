@@ -20,15 +20,38 @@ export default function PropertyCard({
   );
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-navy-100 transition-all duration-500 hover:-translate-y-1 hover:ring-navy-200 hover:shadow-[0_30px_70px_-30px_rgba(16,27,45,0.35)]">
-      <div className="relative aspect-[4/5] overflow-hidden bg-navy-100 lg:aspect-square">
+    /*
+      Hover calcado del de las tarjetas de apple.com/store (`.rf-ccard-content`):
+      la tarjeta no se levanta, se escala un 1 %, y la sombra ya existe en
+      reposo y solo se profundiza. 300 ms con la curva de salida de Apple.
+      Al escalar la tarjeta entera, la foto acompaña sin animación propia:
+      es la misma transformación, así que no pueden desincronizarse.
+
+      Sin borde, también como Apple: el canto lo define la sombra. El `ring`
+      que había era navy-100 sobre un fondo casi del mismo valor y no llegaba
+      a leerse; arriba, además, el borde ya lo marca la propia foto.
+    */
+    <article className="group flex h-full flex-col overflow-hidden rounded-panel bg-white shadow-[2px_4px_12px_rgba(0,0,0,0.08)] transition-[scale,box-shadow] duration-300 ease-[cubic-bezier(0,0,0.5,1)] hover:scale-[1.01] hover:shadow-[2px_4px_16px_rgba(0,0,0,0.16)] motion-reduce:transition-none motion-reduce:hover:scale-100">
+      {/*
+        4:3 en vez de 4:5 / cuadrado: la foto se llevaba el 79 % de la altura
+        de la ficha y empujaba los datos fuera de la pantalla. Con esta
+        proporción la ficha entera entra en el alto del viewport y se lee
+        precio, dirección y ambientes sin scrollear.
+      */}
+      <div className="relative aspect-[4/3] overflow-hidden bg-navy-100">
         <Image
           src={property.image}
           alt={property.imageAlt}
           fill
           priority={priority}
           sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 30vw"
-          className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+          /*
+            Sin zoom propio, a propósito: la foto se agranda porque se escala
+            la tarjeta que la contiene, igual que en apple.com/store. Antes
+            tenía su propia animación de 900 ms contra 500 ms de la tarjeta y
+            el zoom seguía creciendo cuando la tarjeta ya se había frenado.
+          */
+          className="object-cover"
         />
 
         <div
@@ -36,37 +59,43 @@ export default function PropertyCard({
           className="absolute inset-0 bg-gradient-to-t from-navy-950/70 via-navy-950/5 to-transparent"
         />
 
-        <div className="absolute left-5 top-5 flex flex-wrap gap-2">
-          <span className="rounded-full bg-white/95 px-3.5 py-1.5 text-[11px] font-semibold text-navy-900 backdrop-blur">
+        <div className="absolute left-4 top-4 flex flex-wrap gap-1.5">
+          <span className="rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-medium text-navy-900 backdrop-blur">
             {property.type} en {property.operation}
           </span>
           {property.highlighted ? (
-            <span className="rounded-full bg-navy-900 px-3.5 py-1.5 text-[11px] font-semibold text-white">
+            <span className="rounded-full bg-navy-900 px-2.5 py-1 text-[11px] font-medium text-white">
               Destacada
             </span>
           ) : null}
         </div>
 
-        <p className="absolute bottom-6 left-6 text-3xl font-semibold tracking-tight text-white">
+        <p className="absolute bottom-4 left-5 text-2xl font-semibold tracking-tight text-white">
           {property.price}
         </p>
       </div>
 
-      <div className="flex flex-1 flex-col p-7 lg:p-8">
-        <h3 className="text-xl leading-snug text-navy-900">{property.title}</h3>
+      <div className="flex flex-1 flex-col p-6">
+        <h3 className="text-[17px] font-semibold leading-snug text-navy-900">
+          {property.title}
+        </h3>
 
-        <p className="mt-3 flex items-center gap-2 text-sm text-navy-500">
-          <MapPin className="h-4 w-4 shrink-0" strokeWidth={1.75} />
+        <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-navy-500">
+          <MapPin className="h-3.5 w-3.5 shrink-0" strokeWidth={1.75} />
           {property.address} · {property.neighborhood}
         </p>
 
-        <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-3 border-t border-navy-100 pt-7">
+        {/* Sin línea divisoria: la separación la da el aire, no un borde. */}
+        <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-2">
           {property.features.map((feature) => (
             <li
               key={feature.label}
-              className="flex items-center gap-2 text-sm text-navy-600"
+              className="flex items-center gap-1.5 text-[13px] text-navy-600"
             >
-              <feature.icon className="h-4 w-4 text-navy-400" strokeWidth={1.5} />
+              <feature.icon
+                className="h-3.5 w-3.5 text-navy-400"
+                strokeWidth={1.5}
+              />
               {feature.label}
             </li>
           ))}
@@ -76,11 +105,11 @@ export default function PropertyCard({
           href={inquiry}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-auto flex items-center justify-between gap-4 pt-8 text-sm font-semibold text-navy-900 transition-colors hover:text-navy-600"
+          className="mt-auto flex items-center gap-1.5 pt-5 text-[13px] font-semibold text-navy-900 transition-colors hover:text-navy-500"
         >
           Consultar disponibilidad
           <ArrowUpRight
-            className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            className="h-3.5 w-3.5 transition-[translate] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
             strokeWidth={2}
           />
         </Link>
